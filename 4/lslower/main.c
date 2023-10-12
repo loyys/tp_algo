@@ -17,7 +17,7 @@ int stop(void);
     goto label;                                                                \
   }
 
-#define NMEMB 4
+#define NMEMB 16
 
 int main(void) {
   fputs(
@@ -26,27 +26,17 @@ int main(void) {
   srand(0);
   do {
     lslower *s = lslower_empty();
-    lslower *s2 = lslower_empty();
     ON_ERROR_GOTO(s == NULL, "Heap_overflow", dispose)
-    ON_ERROR_GOTO(s2 == NULL, "Heap_overflow", dispose)
     for (int k = 0; k < NMEMB; ++k) {
       slower x;
       slower_rand(&x);
       ON_ERROR_GOTO(lslower_insert_head(s, &x) != 0, "Heap overflow", dispose);
     }
     ON_ERROR_GOTO(lslower_fput(s, stdout) == EOF, "Internal error", dispose)
-    int i = NMEMB / 3;
-    while (i != 0 && lslower_move_head_head(s, s2) == 0) {
-      lslower_fput(s, stdout);
-      lslower_fput(s2, stdout);
-      --i;
-    }
-    ON_ERROR_GOTO(lslower_move_all_head(s, s2) != 0, "Internal error", dispose)
+    ON_ERROR_GOTO(lslower_quicksort(s) != 0, "Heap overflow", dispose)
     lslower_fput(s, stdout);
-    lslower_fput(s2, stdout);
 dispose:
     lslower_dispose(&s);
-    lslower_dispose(&s2);
   } while (!stop());
 }
 
