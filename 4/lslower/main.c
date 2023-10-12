@@ -17,11 +17,11 @@ int stop(void);
     goto label;                                                                \
   }
 
-#define NMEMB 0
+#define NMEMB 4
 
 int main(void) {
   fputs(
-      "--- Tests on lslower module\n"
+      "--- Tests on lslower modules\n"
       "--- Type ctrl-d or enter 'q' or 'Q' to exit\n\n", stdout);
   srand(0);
   do {
@@ -35,10 +35,15 @@ int main(void) {
       ON_ERROR_GOTO(lslower_insert_head(s, &x) != 0, "Heap overflow", dispose);
     }
     ON_ERROR_GOTO(lslower_fput(s, stdout) == EOF, "Internal error", dispose)
-    while (lslower_move_head_head(s, s2) == 0) {
+    int i = NMEMB / 3;
+    while (i != 0 && lslower_move_head_head(s, s2) == 0) {
       lslower_fput(s, stdout);
       lslower_fput(s2, stdout);
+      --i;
     }
+    ON_ERROR_GOTO(lslower_move_all_head(s, s2) != 0, "Internal error", dispose)
+    lslower_fput(s, stdout);
+    lslower_fput(s2, stdout);
 dispose:
     lslower_dispose(&s);
     lslower_dispose(&s2);
