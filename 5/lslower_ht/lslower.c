@@ -113,11 +113,6 @@ int lslower_tail_value(const lslower *s, slower *ptr) {
   return 0;
 }
 
-
-//  lslower_move_head_head, lslower_move_head_tail : renvoie une valeur non
-//    nulle si la liste associée à src est vide. Déplace sinon la cellule de
-//    tête de la liste associée à src en tête (head_head), en queue (head_tail)
-//    de la liste associée à dest et renvoie zéro.
 int lslower_move_head_head(lslower *src, lslower *dest) {
   if (lslower_is_empty(src)) {
     return -1;

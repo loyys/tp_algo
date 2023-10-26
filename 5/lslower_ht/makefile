@@ -3,7 +3,9 @@ CC = gcc
 CFLAGS = -std=c2x \
   -Wall -Wconversion -Werror -Wextra -Wpedantic -Wwrite-strings \
   -O2 \
-  -I$(slower_dir)
+  -I$(slower_dir) \
+  -DLOWER_CARD=8 -DSLOWER_LENGTH=4 -DSLOWER_COMPAR_LENGTH='SLOWER_LENGTH / 2'
+
 vpath %.c $(slower_dir)
 vpath %.h $(slower_dir)
 objects = lslower.o lslower_ext.o main.o slower.o
